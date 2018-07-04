@@ -15,6 +15,9 @@ namespace ConsoleApp1
             int cpunum = 0; // CPUの人数
             int[] hands = null; // 人数分のじゃんけんの手を保持する配列
             int[] results = null; // プレーヤーごとのじゃんけんの結果を保持する配列
+            int rock = 1; // グー
+            int paper = 2; // チョキ
+            int scissors = 3; // パー
 
             while (personCheck == 0)
             {
@@ -64,7 +67,7 @@ namespace ConsoleApp1
                 // CPUの手を決める。
                 for (int i = 0; i < cpunum; i++)
                 {
-                    hands[usernum + i] = new System.Random().Next(3);
+                    hands[usernum + i] = new System.Random().Next(1, 4);
                 }
 
                 int rockNum = 0; // グーを出している人数
@@ -88,8 +91,8 @@ namespace ConsoleApp1
                     }
                 }
 
-                // グー、チョキ、パーのいずれも使われている場合
-                if ((rockNum > 0 && paperNum > 0 && scissorsNum > 0) || rockNum == usernum + cpunum || paperNum == usernum + cpunum || scissorsNum == usernum + cpunum)
+                // あいこの場合
+                if ((rockNum > 0 && paperNum > 0 && scissorsNum > 0) || rockNum == (usernum + cpunum) || paperNum == (usernum + cpunum) || (scissorsNum == usernum + cpunum))
                 {
                     Console.WriteLine("あいこです。");
                     battlefinish = 0;
@@ -101,11 +104,11 @@ namespace ConsoleApp1
                     {
                         for (int i = 0; i < hands.Length; i++)
                         {
-                            if (hands[i] == 2)
+                            if (hands[i] == rock)
                             {
                                 results[i] = 1;
                             }
-                            else if (hands[i] == 3)
+                            else if (hands[i] == paper)
                             {
                                 results[i] = 0;
                             }
@@ -115,11 +118,11 @@ namespace ConsoleApp1
                     {
                         for (int i = 0; i < hands.Length; i++)
                         {
-                            if (hands[i] == 3)
+                            if (hands[i] == paper)
                             {
                                 results[i] = 1;
                             }
-                            else if (hands[i] == 2)
+                            else if (hands[i] == scissors)
                             {
                                 results[i] = 0;
                             }
@@ -129,11 +132,11 @@ namespace ConsoleApp1
                     {
                         for (int i = 0; i < hands.Length; i++)
                         {
-                            if (hands[i] == 1)
+                            if (hands[i] == rock)
                             {
                                 results[i] = 1;
                             }
-                            else if (hands[i] == 2)
+                            else if (hands[i] == scissors)
                             {
                                 results[i] = 0;
                             }
