@@ -1,4 +1,4 @@
-﻿// <copyright file="Janken.cs" company="PlaceholderCompany">
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,9 +6,9 @@ namespace ConsoleApp1
 {
     using System;
 
-    internal class Program
+    internal static class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             PlayerNum(); // プレイヤーの人数を設定
             bool retryFlg = true;
@@ -33,21 +33,22 @@ namespace ConsoleApp1
         }
 
         // じゃんけんの手1~3を出している場合は1、それ以外を出している場合は0を返す。
-        private static int CheckJankenNum(string input)
+        private static bool CheckJankenNum(string input)
         {
+            bool checkHand = false;
             if (int.TryParse(input, out int i))
             {
                 if (i > 0 && i < 4)
                 {
-                    return 1;
+                    checkHand = true;
                 }
                 else
                 {
-                    return 0;
+                    checkHand = false;
                 }
             }
 
-            return 0;
+            return checkHand;
         }
 
         // プレイヤーの人数を設定する。
@@ -88,17 +89,17 @@ namespace ConsoleApp1
         {
             for (int i = 0; i < Janken.UserNum; i++)
             {
-                int check = 0;
-                while (check == 0)
+                bool check = false;
+                while (!check)
                 {
                     Console.WriteLine("ユーザ" + (i + 1) + "の手を入力してください。1:グー 2:チョキ 3:パー");
                     var uhand = Console.ReadLine();
                     check = CheckJankenNum(uhand);
-                    if (check == 0)
+                    if (!check)
                     {
                         Console.WriteLine("1~3の数値を入力してください。");
                     }
-                    else if (check == 1)
+                    else if (check)
                     {
                         Janken.Hands[i] = int.Parse(uhand);
                     }
@@ -138,7 +139,7 @@ namespace ConsoleApp1
                 }
             }
 
-            drowFlg = CheckWinner(rockNum, scissorsNum, paperNum);
+            drowFlg = CheckWinner(rockNum, paperNum, scissorsNum);
             return drowFlg;
         }
 
@@ -163,41 +164,32 @@ namespace ConsoleApp1
                     // チョキが勝ちの場合
                     if (rockNum == 0)
                     {
-                        if (Janken.Hands[i] == Janken.rock)
-                        {
-                            Janken.Results[i] = true;
-                        }
-                        else if (Janken.Hands[i] == Janken.Paper)
-                        {
-                            Janken.Results[i] = false;
-                        }
+                        InputResult(i, Janken.scissors, Janken.Paper);
                     }// パーが勝ちの場合
                     else if (scissorsNum == 0)
                     {
-                        if (Janken.Hands[i] == Janken.Paper)
-                        {
-                            Janken.Results[i] = true;
-                        }
-                        else if (Janken.Hands[i] == Janken.scissors)
-                        {
-                            Janken.Results[i] = false;
-                        }
+                        InputResult(i, Janken.Paper, Janken.scissors);
                     }// グーが勝ちの場合
                     else if (paperNum == 0)
                     {
-                        if (Janken.Hands[i] == Janken.rock)
-                        {
-                            Janken.Results[i] = true;
-                        }
-                        else if (Janken.Hands[i] == Janken.scissors)
-                        {
-                            Janken.Results[i] = false;
-                        }
+                        InputResult(i, Janken.rock, Janken.scissors);
                     }
                 }
             }
 
             return drowFlg;
+        }
+
+        private static void InputResult(int num,int hand1, int hand2)
+        {
+            if (Janken.Hands[num] == hand1)
+            {
+                Janken.Results[num] = true;
+            }
+            else if (Janken.Hands[num] == hand2)
+            {
+                Janken.Results[num] = false;
+            }
         }
 
         private static void ResultOutput() // 勝ち負けを出力する。
