@@ -42,11 +42,11 @@ namespace ConsoleApp1
             while (!isNumberSelected)
             {
                 Console.WriteLine("ユーザの人数を入力してください。");
-                var userr = Console.ReadLine();
+                var userNum = Console.ReadLine();
 
                 Console.WriteLine("対戦したいCPUの数を入力してください。");
-                var cpur = Console.ReadLine();
-                isNumberSelected = SetPlayerNum(userr, cpur);
+                var cpuNum = Console.ReadLine();
+                isNumberSelected = SetPlayerNum(userNum, cpuNum);
             }
         }
 
@@ -159,11 +159,11 @@ namespace ConsoleApp1
         }
 
         // Playerの人数をセットする
-        public static bool SetPlayerNum(string userr, string cpur)
+        public static bool SetPlayerNum(string userNum, string cpuNum)
         {
-            if ((int.TryParse(userr, out int un) && int.TryParse(cpur, out int cn))
-                && (int.Parse(userr) >= 1 && int.Parse(userr) <= 10)
-                && (int.Parse(cpur) >= 1 && int.Parse(cpur) <= 10))
+            if ((int.TryParse(userNum, out int un) && int.TryParse(cpuNum, out int cn))
+                && (int.Parse(userNum) >= 1 && int.Parse(userNum) <= 10)
+                && (int.Parse(cpuNum) >= 1 && int.Parse(cpuNum) <= 10))
             {
                 Janken.UserNum = un;
                 Janken.CpuNum = cn;
