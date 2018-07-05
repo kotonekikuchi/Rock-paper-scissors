@@ -8,12 +8,215 @@ namespace ConsoleApp1
 
     public static class Janken
     {
-        public static int UserNum = 0;
-        public static int CpuNum = 0;
-        public static int[] Hands = null;
-        public static bool[] Results = null;
-        public static int rock = 1;
-        public static int Paper = 2;
-        public static int scissors = 3;
+        private const int RockValue = 1; // グーの手
+        private const int PaperValue = 2; // パーの手
+        private const int ScissorsValue = 3; // チョキの手
+
+        public static int UserNum { get; set; } = 0;
+
+        public static int CpuNum { get; set; } = 0;
+
+        public static int[] Hands { get; set; } = null;
+
+        public static bool[] Results { get; set; } = null;
+
+        public static int Rock { get => RockValue; }
+
+        public static int Paper { get => PaperValue; }
+
+        public static int Scissors { get => ScissorsValue; }
+
+        // じゃんけんの参加人数を決める。
+        public static void PlayerNum()
+        {
+            bool isNumberSelected = false;
+            while (!isNumberSelected)
+            {
+                Console.WriteLine("ユーザの人数を入力してください。");
+                var userr = Console.ReadLine();
+
+                Console.WriteLine("対戦したいCPUの数を入力してください。");
+                var cpur = Console.ReadLine();
+
+                if ((int.TryParse(userr, out int un) && int.TryParse(cpur, out int cn))
+                    && (int.Parse(userr) >= 1 && int.Parse(userr) <= 10)
+                    && (int.Parse(cpur) >= 1 && int.Parse(cpur) <= 10))
+                {
+                    Janken.UserNum = un;
+                    Janken.CpuNum = cn;
+                    isNumberSelected = true;
+                    Janken.Hands = new int[un + cn];
+                    Janken.Results = new bool[un + cn];
+                }
+                else
+                {
+                    Console.WriteLine("1以上10以下の数値を入力してください。");
+                }
+            }
+        }
+
+        // ユーザに手を決めてもらう。
+        public static void SelectUserHand()
+        {
+            for (int i = 0; i < Janken.UserNum; i++)
+            {
+                bool isHandSelected = false;
+                while (!isHandSelected)
+                {
+                    Console.WriteLine("ユーザ" + (i + 1) + "の手を入力してください。1:グー 2:チョキ 3:パー");
+                    var uhand = Console.ReadLine();
+                    isHandSelected = CheckJankenNum(uhand);
+                    if (!isHandSelected)
+                    {
+                        Console.WriteLine("1~3の数値を入力してください。");
+                    }
+                    else if (isHandSelected)
+                    {
+                        Janken.Hands[i] = int.Parse(uhand);
+                    }
+                }
+            }
+        }
+
+        // CPUのじゃんけんの手を選ぶ
+        public static void SelectCpuHand()
+        {
+            for (int i = 0; i < Janken.CpuNum; i++)
+            {
+                Janken.Hands[Janken.UserNum + i] = new System.Random().Next(1, 4);
+            }
+        }
+
+        // じゃんけんの各手の人数を集計する
+        public static bool CheckJankenResult()
+        {
+            int rockNum = 0; // グーを出している人数
+            int paperNum = 0; // パーを出している人数
+            int scissorsNum = 0; // チョキを出している人数
+
+            // じゃんけんの処理を行う。
+            for (int i = 0; i < Janken.Hands.Length; i++)
+            {
+                switch (Janken.Hands[i])
+                {
+                    case 1:
+                        rockNum++;
+                        break;
+                    case 2:
+                        scissorsNum++;
+                        break;
+                    case 3:
+                        paperNum++;
+                        break;
+                }
+            }
+
+            return CheckJankenResult(rockNum, paperNum, scissorsNum);
+        }
+
+        public static void ResultOutput() // 勝ち負けを出力する。
+        {
+            for (int i = 0; i < Janken.UserNum; i++)
+            {
+                if (Janken.Results[i])
+                {
+                    Console.WriteLine("ユーザ" + (i + 1) + "は勝ちです。");
+                }
+                else if (!Janken.Results[i])
+                {
+                    Console.WriteLine("ユーザ" + (i + 1) + "は負けです。");
+                }
+            }
+        }
+
+        public static bool CheckRetry() // リトライするかのチェック
+        {
+            bool checkRetry = false; // リトライの入力が正しく行われているかどうか
+            while (!checkRetry)
+            {
+                Console.WriteLine("リトライしますか？ 1:はい 2:いいえ");
+                var retry = Console.ReadLine();
+                if (int.TryParse(retry, out int re))
+                {
+                    if (re <= 0 || re >= 3)
+                    {
+                        Console.WriteLine("1,2いずれかの数値を入力してください。");
+                    }
+                    else
+                    {
+                        checkRetry = true;
+                        if (re == 1)
+                        {
+                            return true;
+                        }
+                        else if (re == 2)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    checkRetry = false;
+                    Console.WriteLine("1,2いずれかの数値を入力してください。");
+                }
+            }
+
+            return false;
+        }
+
+        // じゃんけんの手1~3を出している場合は1、それ以外を出している場合は0を返す。
+        private static bool CheckJankenNum(string input)
+        {
+            return int.TryParse(input, out int i) && (int.Parse(input) > 0 && int.Parse(input) < 4);
+        }
+
+        // じゃんけんがあいこなのか、勝負がついたのかを判定する
+        private static bool CheckJankenResult(int rockNum, int paperNum, int scissorsNum)
+        {
+            // あいこの場合
+            if ((rockNum > 0 && paperNum > 0 && scissorsNum > 0)
+                || rockNum == (Janken.UserNum + Janken.CpuNum)
+                || paperNum == (Janken.UserNum + Janken.CpuNum)
+                || (scissorsNum == Janken.UserNum + Janken.CpuNum))
+            {
+                Console.WriteLine("あいこです。");
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < Janken.Hands.Length; i++)
+                {
+                    // チョキが勝ちの場合
+                    if (rockNum == 0)
+                    {
+                        SetResult(i, Janken.Scissors, Janken.Paper);
+                    }// パーが勝ちの場合
+                    else if (scissorsNum == 0)
+                    {
+                        SetResult(i, Janken.Paper, Janken.Scissors);
+                    }// グーが勝ちの場合
+                    else if (paperNum == 0)
+                    {
+                        SetResult(i, Janken.Rock, Janken.Scissors);
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        // 誰がじゃんけんに勝ったのがを設定する
+        private static void SetResult(int num, int hand1, int hand2)
+        {
+            if (Janken.Hands[num] == hand1)
+            {
+                Janken.Results[num] = true;
+            }
+            else if (Janken.Hands[num] == hand2)
+            {
+                Janken.Results[num] = false;
+            }
+        }
     }
 }
