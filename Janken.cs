@@ -11,7 +11,6 @@ namespace ConsoleApp1
         private const int RockValue = 1; // グーの手
         private const int ScissorsValue = 2; // チョキの手
         private const int PaperValue = 3; // パーの手
-       
 
         public static int UserNum { get; set; } = 0;
 
