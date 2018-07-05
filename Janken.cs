@@ -86,8 +86,8 @@ namespace ConsoleApp1
         public static bool CheckJankenResult()
         {
             int rockNum = 0; // グーを出している人数
-            int paperNum = 0; // パーを出している人数
             int scissorsNum = 0; // チョキを出している人数
+            int paperNum = 0; // パーを出している人数
 
             // じゃんけんの処理を行う。
             for (int i = 0; i < Janken.Hands.Length; i++)
@@ -191,8 +191,8 @@ namespace ConsoleApp1
             // あいこの場合
             if ((rockNum > 0 && paperNum > 0 && scissorsNum > 0)
                 || rockNum == (Janken.UserNum + Janken.CpuNum)
-                || paperNum == (Janken.UserNum + Janken.CpuNum)
-                || (scissorsNum == Janken.UserNum + Janken.CpuNum))
+                || scissorsNum == (Janken.UserNum + Janken.CpuNum)
+                || paperNum == (Janken.UserNum + Janken.CpuNum))
             {
                 Console.WriteLine("あいこです。");
                 return true;
@@ -221,13 +221,13 @@ namespace ConsoleApp1
         }
 
         // 誰がじゃんけんに勝ったのがを設定する
-        public static void SetResult(int num, int hand1, int hand2)
+        public static void SetResult(int num, int winHand, int loseHand)
         {
-            if (Janken.Hands[num] == hand1)
+            if (Janken.Hands[num] == winHand)
             {
                 Janken.Results[num] = true;
             }
-            else if (Janken.Hands[num] == hand2)
+            else if (Janken.Hands[num] == loseHand)
             {
                 Janken.Results[num] = false;
             }
