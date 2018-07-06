@@ -76,9 +76,12 @@ namespace ConsoleApp1
         // CPUのじゃんけんの手を選ぶ
         public static void SelectCpuHand()
         {
+            int seed = Environment.TickCount;
             for (int i = 0; i < Janken.CpuNum; i++)
             {
-                Janken.Hands[Janken.UserNum + i] = new System.Random().Next(1, 4);
+                Random cpuRandom = new System.Random(seed++);
+                Janken.Hands[Janken.UserNum + i] = cpuRandom.Next(1, 4);
+                Console.WriteLine(Janken.Hands[Janken.UserNum + i]);
             }
         }
 
