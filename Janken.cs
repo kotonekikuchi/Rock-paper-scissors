@@ -32,7 +32,6 @@ namespace ConsoleApp1
             CpuNum = 0;
             Hands = null;
             Results = null;
-
         }
 
         // じゃんけんの参加人数を決める。
@@ -81,7 +80,6 @@ namespace ConsoleApp1
             {
                 Random cpuRandom = new System.Random(seed++);
                 Janken.Hands[Janken.UserNum + i] = cpuRandom.Next(1, 4);
-                Console.WriteLine(Janken.Hands[Janken.UserNum + i]);
             }
         }
 
@@ -93,9 +91,9 @@ namespace ConsoleApp1
             int paperNum = 0; // パーを出している人数
 
             // じゃんけんの処理を行う。
-            for (int i = 0; i < Janken.Hands.Length; i++)
+            foreach (int hand in Janken.Hands)
             {
-                switch (Janken.Hands[i])
+                switch (hand)
                 {
                     case 1:
                         rockNum++;
@@ -116,14 +114,8 @@ namespace ConsoleApp1
         {
             for (int i = 0; i < Janken.UserNum; i++)
             {
-                if (Janken.Results[i])
-                {
-                    Console.WriteLine("ユーザ" + (i + 1) + "は勝ちです。");
-                }
-                else if (!Janken.Results[i])
-                {
-                    Console.WriteLine("ユーザ" + (i + 1) + "は負けです。");
-                }
+                var result = Janken.Results[i] ? "勝ち" : "負け";
+                Console.WriteLine($"ユーザ{i + 1}は{result}です。");
             }
         }
 
