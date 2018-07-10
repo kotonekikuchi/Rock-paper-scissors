@@ -6,93 +6,30 @@ namespace ConsoleApp1
 {
     using System;
 
-    internal class Program
+    internal static class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            int result = 0;
-            while (result == 0)
+            Janken.PlayerNum(); // プレイヤーの人数を設定
+            bool isRetry = true;
+            while (isRetry)
             {
-                Console.WriteLine("じゃんけんの手を入力してください。1:グー 2:チョキ 3:パー");
-                var usernum = Console.ReadLine();
-                int hand;
-                if (int.TryParse(usernum, out hand))
+                bool isDrow = true; // あいこ判定
+                while (isDrow)
                 {
-                    if (hand > 0 && hand <= 4)
-                    {
-                        result = Janken(hand);
-                    }
-                    else
-                    {
-                        Console.WriteLine("1,2,3いずれかの数値を入力してください。");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("1,2,3いずれかの数値を入力してください。");
+                    // ユーザの手を決める。
+                    Janken.SelectUserHand();
+
+                    // CPUの手を決める。
+                    Janken.SelectCpuHand();
+
+                    // じゃんけんの結果判定
+                    isDrow = Janken.CheckJankenResult();
                 }
 
-                if (result == 1)
-                {
-                    Console.WriteLine("あなたの負けです");
-                    result = Retry();
-                }
-                else if (result == 2)
-                {
-                    Console.WriteLine("あなたの勝ちです");
-                    result = Retry();
-                }
-         }
-        }
-
-        public static int Janken(int userhand)
-        {
-            Random random = new Random();
-            int cpuhand = random.Next(3);
-
-            if (userhand == cpuhand)
-            {
-                Console.WriteLine("あいこです。もう一回手を入力してください。1:グー 2:チョキ 3:パー");
+                Janken.ResultOutput(); // 結果の出力を行う。
+                isRetry = Janken.CheckRetry(); // リトライするかどうか
             }
-            else
-            {
-                int result = (userhand + 3 - cpuhand) % 3;
-                if (result == 1)
-                {
-                    return 1;
-                }
-                else if (result == 2)
-                {
-                    return 2;
-                }
-            }
-
-            return 0;
-        }
-
-        public static int Retry()
-        {
-            int result;
-            Console.WriteLine("再度じゃんけんをしますか？ 1:はい 2:いいえ"); // 1,2以外を入力した場合は終了させる。
-            var retry = Console.ReadLine();
-
-            int j;
-            if (int.TryParse(retry, out j))
-            {
-                if (j == 1)
-                {
-                    result = 0;
-                }
-                else
-                {
-                    result = 1;
-                }
-            } else
-            {
-                result = 1;
-            }
-
-            return result;
         }
     }
 }
